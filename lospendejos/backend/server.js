@@ -1,10 +1,18 @@
-const http = require('http');
+const express = require('express');
+const serveStatic = require('serve-static');
+const path = require('path');
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello, World!\n');
-});
+const app = express();
 
-server.listen(3000, () => {
-    console.log('Server running on port 3000');
-});
+// Serve the static files from the Vue app
+app.use('/', serveStatic(path.join(__dirname, '../dist/')));
+
+// Handle production
+if (process.env.NODE_ENV === 'production') {
+    // Serve any request that doesn't match a static file with index.html
+    app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
+}
+
+// Start the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server started on port ${port}`));
