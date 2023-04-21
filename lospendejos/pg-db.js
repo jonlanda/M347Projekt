@@ -1,14 +1,25 @@
-const { Pool } = require('pg');
+const { Client } = require('pg');
 
-const pool = new Pool({
+const client = new Client({
     user: 'postgres',
-    password: 'mysecretpassword',
-    host: '172.19.0.2',
+    host: 'localhost',
     database: 'mydb',
+    password: 'mysecretpassword',
     port: 5432,
 });
 
-pool.query('SELECT NOW()', (err, res) => {
-    console.log(err, res);
-    pool.end();
+client.connect((err) => {
+    if (err) {
+        console.error('connection error', err.stack);
+    } else {
+        console.log('connected');
+    }
+});
+
+client.query('SELECT NOW()', (err, res) => {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log(res.rows);
+    }
 });

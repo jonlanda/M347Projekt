@@ -13,6 +13,10 @@ if (process.env.NODE_ENV === 'production') {
     app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
 }
 
+app.get("/hello", (req, res) => {
+    res.send("Hello");
+})
+
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
