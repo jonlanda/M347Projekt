@@ -1,0 +1,53 @@
+{
+    "$id": "filmDB",
+    "description": "DB for the Project M347",
+    "type": "object",
+    "properties": {
+        "film": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "ObjectId"
+                },
+                "filmName": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "array"
+                    }
+                },
+                "filmOrSeries": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "link": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "ObjectId"
+                },
+                "linkValue": {
+                    "type": "string"
+                },
+                "filmId": {
+                    "type": "ObjectId"
+                },
+                "adBlocker": {
+                    "type": "boolean"
+                },
+                "dubLanguage": {
+                    "type": "string"
+                },
+                "subLanguage": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 const express = require('express');
 const serveStatic = require('serve-static');
 const path = require('path');
+const db = require('./pg-db')
 
 const app = express();
 
@@ -13,10 +14,19 @@ if (process.env.NODE_ENV === 'production') {
     app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
 }
 
+//API START
+
 app.get("/hello", (req, res) => {
     res.send("Hello");
 })
 
+app.get("/films", async (req, res) => {
+    let data = await db.getAllFilms();
+    res.send(data)
+})
+
+//API END
+
 // Start the server
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server started on port ${port}`));
+app.listen(port, () => console.log(`Server started on port ${port} joooooooooon`));
