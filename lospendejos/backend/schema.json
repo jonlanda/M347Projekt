@@ -36,7 +36,7 @@
                     "type": "string"
                 },
                 "filmId": {
-                    "type": "ObjectId"
+                    "type": "string"
                 },
                 "adBlocker": {
                     "type": "boolean"
@@ -51,3 +51,11 @@
         }
     }
 }
+
+db.link.insertOne({
+    linkValue: "https://loool.com/jonischcool",
+    filmId: '6447c82a570a19566db7c086',
+    adBlocker: true,
+    dubLanguage: "English",
+    subLanguage: "Spanish"
+});

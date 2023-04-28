@@ -22,7 +22,17 @@ app.get("/hello", (req, res) => {
 
 app.get("/films", async (req, res) => {
     let data = await db.getAllFilms();
-    res.send(data)
+    res.status(200).send(data);
+})
+
+app.get("/getLink/:id", async (req, res) => {
+    let data = await db.getLinksForFilm(req.params.id);
+    res.status(200).send(data);
+})
+
+app.get("/getLinkWithDub/:id/:dub", async (req, res) => {
+    let data = await db.getLinksForFilmAndLanguage(req.params.id, req.params.dub);
+    res.status(200).send(data);
 })
 
 //API END
