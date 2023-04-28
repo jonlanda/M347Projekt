@@ -53,9 +53,21 @@
 }
 
 db.link.insertOne({
-    linkValue: "https://loool.com/jonischcool",
+    linkValue: "https://nico.williams/channurdribble",
     filmId: '6447c82a570a19566db7c086',
-    adBlocker: true,
-    dubLanguage: "English",
-    subLanguage: "Spanish"
+    adBlocker: false,
+    dubLanguage: "spanish",
+    subLanguage: "english"
+});
+
+db.film.insertOne({
+    filmName: "Iñaki Williams Gol",
+    description: "AUPA ATHLETIC",
+    genres: [
+        [
+            "Sport",
+            "Culture"
+        ]
+    ],
+    filmOrSeries: false
 });

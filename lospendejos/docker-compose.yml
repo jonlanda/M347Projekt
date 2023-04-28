@@ -1,16 +1,16 @@
 version: "3"
 services:
   db:
-    image: postgres
+    image: mongo
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: mydb
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mysecretpassword
+      MONGO_INITDB_DATABASE: mydb
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/data/db
     networks:
       - pendejoNetwork
 
@@ -20,10 +20,14 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    environment:
+      MONGO_URI: mongodb://mongo:mysecretpassword@db:27017/
     networks:
       - pendejoNetwork
 
 volumes:
   db-data:
+
+
 networks:
   pendejoNetwork:
