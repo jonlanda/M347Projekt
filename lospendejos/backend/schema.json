@@ -61,13 +61,13 @@ db.link.insertOne({
 });
 
 db.film.insertOne({
-    filmName: "Iñaki Williams Gol",
-    description: "AUPA ATHLETIC",
+    filmName: "Your Name",
+    description: "very good 10/10",
     genres: [
         [
-            "Sport",
-            "Culture"
+            "Anime",
+            "Romance"
         ]
     ],
-    filmOrSeries: false
+    filmOrSeries: true
 });
