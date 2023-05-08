@@ -25,6 +25,12 @@ app.get("/films", async (req, res) => {
     res.status(200).send(data);
 })
 
+app.get("/filmById/:id", async (req, res) => {
+    let data = await db.getFilmById(req.params.id);
+    res.status(200).send(data);
+})
+
+
 app.get("/getLink/:id", async (req, res) => {
     let data = await db.getLinksForFilm(req.params.id);
     res.status(200).send(data);

@@ -6,34 +6,37 @@
           <tr>
             <th>Film Name</th>
             <th>Description</th>
+            <th>Genres</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="film in films" :key="film._id">
-            <td>{{ film.filmName }}</td>
+          <tr v-for="  film   in   films  " :key="film._id">
+            <td>
+              <p>{{ film.filmName }}</p>
+            </td>
             <td>{{ film.description }}</td>
+            <td v-for="  genre   in   film.genres  " :key="film._id">
+              <p v-for="  moreGenre   in   genre  " :key="film._id">{{ moreGenre }}</p>
+            </td>
+            <td><button @click="setFilmId(film._id)">GET LINKS</button></td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <div>
-      <button @click="getLink(id)">get links</button>
-      <ul>
-        <li v-for="allLinks in links" :key="allLinks._id">{{ allLinks.linkValue }}</li>
-      </ul>
-    </div>
-    <div>
-      <button @click="getLinkByLanguage(id, 'spanish')">get spanish links</button>
-      <ul>
-        <li v-for=" link  in  spanishLinks " :key="link._id">{{ link.linkValue }}</li>
-      </ul>
+    <div v-if="viewFilm == true">
+      <p>showing film view</p>
+      <FilmView :film-id="id"></FilmView>
     </div>
   </div>
 </template>
 
 <script>
+import FilmView from './FilmView.vue';
+
 export default {
+  components: {
+    FilmView,
+  },
   data() {
     return {
       filmName: '',
@@ -42,12 +45,18 @@ export default {
       links: [],
       spanishLinks: [],
       films: [],
+      viewFilm: false
     };
   },
   mounted() {
     this.getAllFilms();
   },
   methods: {
+    setFilmId(id) {
+      this.id = id;
+      this.viewFilm = true
+    },
+
     getAllFilms() {
       fetch('/films')
         .then(response => response.json())

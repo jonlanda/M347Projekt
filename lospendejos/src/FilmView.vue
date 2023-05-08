@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>hey hey</p>
     <p>{{ film.filmName }}</p>
     <p>{{ film.description }}</p>
     <p v-for="genre in film.genres" :key="film._id">
@@ -16,6 +17,13 @@
 
 <script>
 export default {
+  name: 'filmView',
+  props: {
+    filmId: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       film: [],
@@ -24,7 +32,7 @@ export default {
     };
   },
   mounted() {
-    this.getFilmById();
+    this.getFilmById(this.filmId);
   },
   methods: {
     getFilmById(id) {
