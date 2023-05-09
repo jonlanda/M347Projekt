@@ -1,23 +1,12 @@
 <template>
   <div>
-    <p>hey hey</p>
-    <p>{{ film.filmName }}</p>
-    <p>{{ film.description }}</p>
-    <p v-for="genre in film.genres" :key="film._id">
-    <p v-for="moreGenre in genre" :key="film._id">{{ moreGenre }}</p>
-    </p>
-    <div>
-      <button @click="getLinkByLanguage(id, 'spanish')">get spanish links</button>
-      <ul>
-        <li v-for=" link  in  spanishLinks " :key="link._id">{{ link.linkValue }}</li>
-      </ul>
-    </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'filmView',
+  name: 'create',
   props: {
     filmId: {
       type: String,
@@ -29,6 +18,7 @@ export default {
       film: [],
       links: [],
       languageLinks: [],
+      filmId: this.filmId,
     };
   },
   mounted() {
@@ -40,7 +30,8 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.film = data;
-          this.getLink(id);
+          this.links = this.getLink(id);
+          console.log(this.film)
         })
         .catch(error => {
           console.log(error);

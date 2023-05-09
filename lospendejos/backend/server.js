@@ -41,6 +41,11 @@ app.get("/getLinkWithDub/:id/:dub", async (req, res) => {
     res.status(200).send(data);
 })
 
+app.post("/addLink/:linkValue/:filmId/:adBlocker/:dubLanguage/:subLanguage", async (req, res) => {
+    let data = await db.addLink(req.params.linkValue, req.params.filmId, req.params.adBlocker, req.params.dubLanguage, req.params.subLanguage);
+    res.status(200).send(data);
+})
+
 //API END
 
 // Start the server
