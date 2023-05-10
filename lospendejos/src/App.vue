@@ -1,6 +1,8 @@
 <template>
   <div>
     <div>
+      <input type="search" v-model="searchQuery" placeholder="Search">
+      <button @click="pressedNewFilm">NEW FILM</button>
       <table>
         <thead>
           <tr>
@@ -12,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="  film   in   films  " :key="film._id">
+          <tr v-for="  film   in   filteredFilm  " :key="film._id">
             <td>
               <p>{{ film.filmName }}</p>
             </td>
@@ -72,6 +74,23 @@
       <input type="text" v-model="newSubLanguage">
       <br>
       <button type="submit">Submit</button>
+      <button @click="cancelLink">Cancel</button>
+    </form>
+  </div>
+  <div v-if="newFilmPressed" id="newFilm">
+    <h2>New Film</h2>
+    <form @submit.prevent="newFilm">
+      <label>Film Name:</label>
+      <input type="text" v-model="newFilmName">
+      <br>
+      <label>Description:</label>
+      <input type="text" v-model="newDescription">
+      <br>
+      <label>Genres: (Separate by coma)</label>
+      <input type="text" v-model="newGenre">
+      <br>
+      <button type="submit">Submit</button>
+      <button @click="cancelFilm">Cancel</button>
     </form>
   </div>
 </template>
@@ -86,11 +105,18 @@ export default {
       films: [],
       showLinks: false,
       addLinkPressed: false,
+      newFilmPressed: false,
       newLinkValue: '',
       newFilmId: '',
       newAdBlocker: false,
       newDubLanguage: '',
       newSubLanguage: '',
+      searchQuery: '',
+      newFilmName: '',
+      newDescription: '',
+      newGenre: '',
+      newGenres: [],
+      newFilmOrSeries: false,
     };
   },
   mounted() {
@@ -141,57 +167,205 @@ export default {
       this.showLinks = true;
     },
 
+    cancelFilm() {
+      this.newFilmPressed = false;
+    },
+
+    cancelLink() {
+      this.addLinkPressed = false;
+    },
+
     pressedAddLink(id) {
       this.addLinkPressed = true;
       this.newFilmId = id;
       this.getFilm(this.newFilmId)
     },
 
-    addLink() {
+    pressedNewFilm() {
+      this.newFilmPressed = true;
+    },
+
+    addGenre() {
+      if (this.newGenre) {
+        this.newGenres.push(this.newGenre);
+        this.newGenre = '';
+      }
+    },
+
+    async addLink() {
       const url = `/addLink/${encodeURIComponent(this.newLinkValue)}/${this.newFilmId}/${this.newAdBlocker}/${this.newDubLanguage.toLowerCase()}/${this.newSubLanguage.toLowerCase()}`;
-      return fetch(url, {
-        method: 'POST'
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok, code failed');
-          }
-          this.addLinkPressed = false;
-          return response.json();
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
+      try {
+        const response = await fetch(url, {
+          method: 'POST'
         });
+        if (!response.ok) {
+          throw new Error('Network response was not ok, code failed');
+        }
+        this.addLinkPressed = false;
+        return await response.json();
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+    },
+
+    async newFilm() {
+      const url = `/newFilm/${this.newFilmName}/${this.newDescription}/${this.newGenre}/${this.newFilmOrSeries}`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST'
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok, code failed');
+        }
+        this.newFilmPressed = false;
+        return await response.json();
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
     }
 
+  },
+  computed: {
+    filteredFilm() {
+      if (this.searchQuery) {
+        return this.films.filter(film => {
+          return film.filmName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        })
+      } else {
+        return this.films
+      }
+    }
   }
 };
 </script>
 
 <style>
+/* Style for the entire page */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style for the search bar and buttons */
+input[type="search"] {
+  border-radius: 25px;
+  border: 2px solid #007bff;
+  /* Replace with your preferred color */
+  padding: 10px;
+}
+
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #0077be;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-left: 5%;
+}
+
+button:hover {
+  background-color: #005c99;
+}
+
+/* Style for the film table */
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 th,
 td {
+  padding: 10px;
   text-align: left;
-  padding: 8px;
-  border: 1px solid black;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-  background-color: #ddd;
-}
-
-tr:nth-child {
   background-color: #f2f2f2;
+  font-weight: normal;
 }
 
-#addLink {
+td p {
+  margin: 0;
+}
+
+/* Style for the links table */
+#linksTable {
+  margin-top: 20px;
+}
+
+#linksTable th,
+#linksTable td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#linksTable th {
+  background-color: #f2f2f2;
+  font-weight: normal;
+}
+
+#linksTable td p {
+  margin: 0;
+}
+
+#linksTable a {
+  color: #0077be;
+}
+
+/* Style for the add link form */
+#addLink,
+#newFilm {
+  margin-top: 20px;
   float: right;
   width: 80%;
   margin-left: 5%;
+}
+
+#addLink label,
+#newFilm label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+#addLink input[type="text"],
+#newFilm input[type="text"],
+#addLink input[type="checkbox"] {
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#addLink input[type="checkbox"] {
+  margin-left: 10px;
+}
+
+#addLink button,
+#newFilm button {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #0077be;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#addLink button:hover,
+#newFilm button:hover {
+  background-color: #005c99;
 }
 </style>

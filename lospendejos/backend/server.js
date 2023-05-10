@@ -46,6 +46,11 @@ app.post("/addLink/:linkValue/:filmId/:adBlocker/:dubLanguage/:subLanguage", asy
     res.status(200).send(data);
 })
 
+app.post("/newFilm/:filmName/:description/:genres/:filmOrSeries", async (req, res) => {
+    let data = await db.newFilm(req.params.filmName, req.params.description, req.params.genres, req.params.filmOrSeries);
+    res.status(200).send(data);
+})
+
 //API END
 
 // Start the server

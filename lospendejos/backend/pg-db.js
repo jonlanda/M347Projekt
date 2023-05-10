@@ -4,47 +4,6 @@ const { MongoClient, ObjectId } = require('mongodb');
 const uri = 'mongodb://mongo:mysecretpassword@10.2.32.17:31000/';
 const client = new MongoClient(uri);
 
-let checkData = (data) => {
-    let response = [];
-    try {
-        JSON.parse(data);
-    } catch (error) {
-        response.push({
-            "errno": 1000,
-            "errmsg": "Bad JSON Format.",
-            "detail": `${error}`
-        })
-    }
-    data.forEach(element => {
-        const {
-            error
-        } = schema.validate(element);
-        if (error) {
-            console.log(error._original);
-            if (error.details[0].message === '"device" is required') {
-                response.push({
-                    "errno": 1001,
-                    "errmsg": "Missing device name."
-                })
-            }
-            if (error.details[0].message === '"time" is required') {
-                response.push({
-                    "errno": 1002,
-                    "errmsg": "Missing Timestamp."
-                })
-            }
-            if (error.details[0].message == '"time" must be in iso format') {
-                response.push({
-                    "errno": 1003,
-                    "errmsg": "Bad Value for.",
-                    "detail": `Timestamp: ${error.details[0].context.value} Object: ${data.indexOf(error._original) + 1}`
-                })
-            }
-        }
-    });
-    return response;
-}
-
 exports.getAllFilms = async () => {
     try {
         await client.connect();
@@ -129,3 +88,22 @@ exports.addLink = async (linkValue, filmId, adBlocker, dubLanguage, subLanguage)
         console.log('Connection closed');
     }
 }
+
+exports.newFilm = async (filmName, description, genres, filmOrSeries) => {
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        console.log('Connected successfully to MongoDB');
+        const db = client.db('film');
+        const newGenres = genres.split(",").map(genre => genre.trim());
+        const films = await db.collection('film').insertOne({ filmName: filmName, description: description, genres: [newGenres], filmOrSeries: filmOrSeries });
+        console.log('query result:', films);
+        return films;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        await client.close();
+        console.log('Connection closed');
+    }
+}
+

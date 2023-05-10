@@ -61,12 +61,13 @@ db.link.insertOne({
 });
 
 db.film.insertOne({
-    filmName: "Your Name",
+    filmName: "A Silent Voice",
     description: "very good 10/10",
     genres: [
         [
             "Anime",
-            "Romance"
+            "Romance",
+            "Sad"
         ]
     ],
     filmOrSeries: true
