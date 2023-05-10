@@ -28,35 +28,36 @@
         </tbody>
       </table>
     </div>
-    <div v-if="showLinks">
-      <h2>Links for {{ filmName }}</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Link</th>
-            <th>AdBlocker recommended</th>
-            <th>Dub-Language</th>
-            <th>Sub-Language</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="  link   in   links  " :key="link.filmId">
-            <td>
-              <a :href="link.linkValue">{{ link.linkValue }}</a>
-            </td>
-            <td>
-              <p>{{ link.adBlocker }}</p>
-            </td>
-            <td>
-              <p>{{ link.dubLanguage }}</p>
-            </td>
-            <td>
-              <p>{{ link.subLanguage }}</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  </div>
+  <div v-if="showLinks" id="showLinks">
+    <h2>Links for {{ filmName }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Link</th>
+          <th>AdBlocker recommended</th>
+          <th>Dub-Language</th>
+          <th>Sub-Language</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="  link   in   links  " :key="link.filmId">
+          <td>
+            <a :href="link.linkValue">{{ link.linkValue }}</a>
+          </td>
+          <td>
+            <p>{{ link.adBlocker }}</p>
+          </td>
+          <td>
+            <p>{{ link.dubLanguage }}</p>
+          </td>
+          <td>
+            <p>{{ link.subLanguage }}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button @click="hideLinks">Hide Links</button>
   </div>
   <div v-if="addLinkPressed" id="addLink">
     <h2>Add Link for {{ filmName }}</h2>
@@ -173,6 +174,10 @@ export default {
 
     cancelLink() {
       this.addLinkPressed = false;
+    },
+
+    hideLinks() {
+      this.showLinks = false;
     },
 
     pressedAddLink(id) {
@@ -323,7 +328,8 @@ td p {
 
 /* Style for the add link form */
 #addLink,
-#newFilm {
+#newFilm,
+#showLinks {
   margin-top: 20px;
   float: right;
   width: 80%;
@@ -352,7 +358,8 @@ td p {
 }
 
 #addLink button,
-#newFilm button {
+#newFilm button,
+#showLinks button {
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -365,7 +372,8 @@ td p {
 }
 
 #addLink button:hover,
-#newFilm button:hover {
+#newFilm button:hover,
+#showLinks button:hover {
   background-color: #005c99;
 }
 </style>
