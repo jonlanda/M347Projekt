@@ -1,8 +1,12 @@
 <template>
   <div>
     <div>
-      <input type="search" v-model="searchQuery" placeholder="Search">
       <button @click="pressedNewFilm">NEW FILM</button>
+      <br>
+      <label>Film Name:</label>
+      <input type="search" v-model="searchQuery" placeholder="Search">
+      <label>Genre:</label>
+      <input type="search" v-model="genreQuery" placeholder="Search">
       <table>
         <thead>
           <tr>
@@ -113,6 +117,7 @@ export default {
       newDubLanguage: '',
       newSubLanguage: '',
       searchQuery: '',
+      genreQuery: '',
       newFilmName: '',
       newDescription: '',
       newGenre: '',
@@ -236,6 +241,10 @@ export default {
         return this.films.filter(film => {
           return film.filmName.toLowerCase().includes(this.searchQuery.toLowerCase())
         })
+      } else if (this.genreQuery) {
+        return this.films.filter(film => {
+          return film.genres.toString().toLowerCase().includes(this.genreQuery.toLowerCase())
+        })
       } else {
         return this.films
       }
@@ -253,14 +262,6 @@ body {
 }
 
 /* Style for the search bar and buttons */
-input[type="search"] {
-  border-radius: 25px;
-  border: 2px solid #007bff;
-  /* Replace with your preferred color */
-  padding: 10px;
-}
-
-
 button {
   border: none;
   border-radius: 5px;
